@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://ep4w2jcnn385"]
+
+[node name="ItemGrid" type="Control" unique_id=1930277793]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 65.0
+offset_top = 44.0
+offset_right = 65.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1906520276]
+layout_mode = 0
+offset_left = 191.00003
+offset_top = 84.000015
+offset_right = 321.00003
+offset_bottom = 172.00002
+scale = Vector2(5, 5)
+
+[node name="BoxContainer" type="BoxContainer" parent="GridContainer" unique_id=1758175014]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/BoxContainer" unique_id=995270592]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+
+[node name="ColorRect2" type="ColorRect" parent="GridContainer/BoxContainer" unique_id=1301617591]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+
+[node name="ColorRect3" type="ColorRect" parent="GridContainer/BoxContainer" unique_id=228796478]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+
+[node name="ColorRect4" type="ColorRect" parent="GridContainer/BoxContainer" unique_id=1654904216]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+
+[node name="ColorRect5" type="ColorRect" parent="GridContainer/BoxContainer" unique_id=2006250156]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+
+[node name="ColorRect6" type="ColorRect" parent="GridContainer/BoxContainer" unique_id=1225943394]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
