@@ -1,29 +1,48 @@
-use godot::classes::{ISprite2D, Sprite2D};
+use godot::classes::{CharacterBody3D, ICharacterBody3D, InputEvent};
 use godot::prelude::*;
 
+use crate::player::player_movement::{HandlePlayerInput, PlayerInputCollection};
+
+mod player_movement;
+
 #[derive(GodotClass)]
-#[class(base=Sprite2D)]
+#[class(base=CharacterBody3D)]
 struct Player {
-    base: Base<Sprite2D>,
-    angular_speed: f64,
+    base: Base<CharacterBody3D>,
+    player_movement_col: PlayerInputCollection,
+    player_camera_base: OnReady<Gd<Node3D>>,
 }
 
 #[godot_api]
-impl ISprite2D for Player {
-    fn init(base: Base<Sprite2D>) -> Self {
+impl ICharacterBody3D for Player {
+    fn init(base: Base<CharacterBody3D>) -> Self {
         Self {
-            angular_speed: std::f64::consts::PI,
             base,
+            player_movement_col: PlayerInputCollection::default(),
+            player_camera_base: OnReady::manual(),
         }
     }
 
     fn physics_process(&mut self, delta: f64) {
-        let radians = (self.angular_speed * delta) as f32;
-        self.base_mut().rotate(radians);
+        self.handle_input();
+        self.handle_movement();
+    }
+
+    fn process(&mut self, delta: f64) {
+        // for now set cam pos every frame should be done smoothly
+        let s_pos = self.base().get_position();
+        self.player_camera_base.set_position(s_pos);
+    }
+
+    fn input(&mut self, event: Gd<InputEvent>) {
+        self.handle_camera_input(event);
     }
 
     fn ready(&mut self) {
         self.base_mut().call_deferred("scream_hello", &[]);
+
+        self.player_camera_base
+            .init(self.base().get_node_as::<Node3D>("playercambase"));
     }
 }
 

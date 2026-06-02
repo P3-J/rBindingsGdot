@@ -1,16 +1,16 @@
-use godot::classes::{INode2D, Node, Node2D};
+use godot::classes::{INode3D, Node, Node3D};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(base=Node2D)]
+#[class(base=Node3D)]
 struct World {
-    base: Base<Node2D>,
+    base: Base<Node3D>,
     ebus: OnReady<Gd<Node>>,
 }
 
 #[godot_api]
-impl INode2D for World {
-    fn init(base: Base<Node2D>) -> Self {
+impl INode3D for World {
+    fn init(base: Base<Node3D>) -> Self {
         Self {
             base,
             ebus: OnReady::manual(),

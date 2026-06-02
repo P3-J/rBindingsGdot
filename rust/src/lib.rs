@@ -8,7 +8,3 @@ struct MyExtension;
 
 #[gdextension]
 unsafe impl ExtensionLibrary for MyExtension {}
-
-struct test {
-    a: grid::slot::Saturn,
-}

@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://bqmcyqmf85awc"
+path="res://.godot/imported/tst_world.map-06730365546e5aa219fb07b7cca0ec41.tres"
+
+[deps]
+
+source_file="res://src/worlds/test_world/tst_world.map"
+dest_files=["res://.godot/imported/tst_world.map-06730365546e5aa219fb07b7cca0ec41.tres"]
+
+[params]
+
