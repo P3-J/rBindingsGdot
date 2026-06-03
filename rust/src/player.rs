@@ -3,6 +3,7 @@ use godot::prelude::*;
 
 use crate::player::player_movement::{HandlePlayerInput, PlayerInputCollection};
 
+mod player_body_movement;
 mod player_movement;
 
 #[derive(GodotClass)]
@@ -10,7 +11,12 @@ mod player_movement;
 struct Player {
     base: Base<CharacterBody3D>,
     player_movement_col: PlayerInputCollection,
+    player_body: PlayerBodyParts,
+}
+
+struct PlayerBodyParts {
     player_camera_base: OnReady<Gd<Node3D>>,
+    player_upper_body: OnReady<Gd<Node3D>>,
 }
 
 #[godot_api]
@@ -19,7 +25,10 @@ impl ICharacterBody3D for Player {
         Self {
             base,
             player_movement_col: PlayerInputCollection::default(),
-            player_camera_base: OnReady::manual(),
+            player_body: PlayerBodyParts {
+                player_camera_base: OnReady::manual(),
+                player_upper_body: OnReady::manual(),
+            },
         }
     }
 
@@ -31,7 +40,8 @@ impl ICharacterBody3D for Player {
     fn process(&mut self, delta: f64) {
         // for now set cam pos every frame should be done smoothly
         let s_pos = self.base().get_position();
-        self.player_camera_base.set_position(s_pos);
+        self.player_body.player_camera_base.set_position(s_pos);
+        self.player_body.player_upper_body.set_position(s_pos);
     }
 
     fn input(&mut self, event: Gd<InputEvent>) {
@@ -41,8 +51,12 @@ impl ICharacterBody3D for Player {
     fn ready(&mut self) {
         self.base_mut().call_deferred("scream_hello", &[]);
 
-        self.player_camera_base
+        self.player_body
+            .player_camera_base
             .init(self.base().get_node_as::<Node3D>("playercambase"));
+        self.player_body
+            .player_upper_body
+            .init(self.base().get_node_as::<Node3D>("upperBody"));
     }
 }
 

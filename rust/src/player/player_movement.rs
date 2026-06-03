@@ -3,8 +3,10 @@ use godot::global::deg_to_rad;
 use godot::prelude::*;
 
 use crate::player::Player;
+use crate::player::player_body_movement::HandlePlayerBodyMovement;
 
 const GRAVITY: f32 = -3.8;
+const MOVEMENT_SPEED: f32 = 10.0;
 
 pub struct PlayerInputCollection {
     pub dir: Vector3,
@@ -46,8 +48,8 @@ impl HandlePlayerInput for Player {
 
     fn handle_movement(&mut self) {
         let mut velocity = self.base().get_velocity();
-        velocity.z = self.player_movement_col.dir.z * 10.0;
-        velocity.x = self.player_movement_col.dir.x * 10.0;
+        velocity.z = self.player_movement_col.dir.z * MOVEMENT_SPEED;
+        velocity.x = self.player_movement_col.dir.x * MOVEMENT_SPEED;
 
         if !self.base().is_on_floor() {
             velocity.y += if velocity.y > -5.0 { GRAVITY } else { 0.0 };
@@ -58,14 +60,14 @@ impl HandlePlayerInput for Player {
     }
 
     fn handle_camera_input(&mut self, event: Gd<InputEvent>) {
-        if !self.player_camera_base.is_node_ready() {
+        if !self.player_body.player_camera_base.is_node_ready() {
             return;
         }
 
         if let Ok(mouse_event) = event.try_cast::<InputEventMouseMotion>() {
             let mouse_relative: Vector2 = mouse_event.get_relative();
 
-            let mut cur_rot = self.player_camera_base.get_rotation();
+            let mut cur_rot = self.player_body.player_camera_base.get_rotation();
             cur_rot += Vector3::new(-mouse_relative.y * 0.01, -mouse_relative.x * 0.01, 0.0);
 
             let x_pitch = cur_rot
@@ -74,7 +76,8 @@ impl HandlePlayerInput for Player {
 
             cur_rot.x = x_pitch;
 
-            self.player_camera_base.set_rotation(cur_rot);
+            self.player_body.player_camera_base.set_rotation(cur_rot);
+            self.rotate_upper_body_with_view();
         };
     }
 }
