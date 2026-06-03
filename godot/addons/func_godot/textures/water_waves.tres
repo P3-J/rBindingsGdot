@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b03pvtpvde7qy"]
+
+[ext_resource type="Texture2D" uid="uid://daefmatkgpeul" path="res://addons/func_godot/textures/water_waves.png" id="1_qfayi"]
+
+[resource]
+albedo_texture = ExtResource("1_qfayi")
+metallic_specular = 0.0
+texture_filter = 2

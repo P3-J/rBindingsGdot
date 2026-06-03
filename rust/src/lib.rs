@@ -1,6 +1,6 @@
 use godot::prelude::*;
 
-mod grid;
+mod car;
 mod player;
 mod world;
 
