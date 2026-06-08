@@ -3,30 +3,12 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_mmxxm"]
 radius = 1.0
 
-[sub_resource type="BoxMesh" id="BoxMesh_puiko"]
-size = Vector3(2, 2, 2)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_e68yd"]
-
 [node name="Player" type="Player" unique_id=56759720]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1076209043]
 shape = SubResource("SphereShape3D_mmxxm")
 
 [node name="playercambase" type="Node3D" parent="." unique_id=243967374]
-top_level = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1321546, 0)
 
 [node name="playercam" type="Camera3D" parent="playercambase" unique_id=1911322148]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3996837, 5.4650536)
-
-[node name="lowerBody" type="Node3D" parent="." unique_id=396747128]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="lowerBody" unique_id=164137159]
-mesh = SubResource("BoxMesh_puiko")
-
-[node name="upperBody" type="Node3D" parent="." unique_id=575757503]
-top_level = true
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="upperBody" unique_id=1349249992]
-transform = Transform3D(1, 0, 0, 0, 0.09635433, 0.9953471, 0, -0.9953471, 0.09635433, 0, 1.2345665, -0.47454017)
-mesh = SubResource("CapsuleMesh_e68yd")

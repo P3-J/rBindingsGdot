@@ -1,9 +1,7 @@
+use crate::player::Player;
 use godot::classes::{Input, InputEvent, InputEventMouseMotion};
 use godot::global::deg_to_rad;
 use godot::prelude::*;
-
-use crate::player::Player;
-use crate::player::player_body_movement::HandlePlayerBodyMovement;
 
 const GRAVITY: f32 = -3.8;
 const MOVEMENT_SPEED: f32 = 10.0;
@@ -26,30 +24,38 @@ pub trait HandlePlayerInput {
 
 impl HandlePlayerInput for Player {
     fn handle_input(&mut self) {
-        let event = Input::singleton();
+        let input = Input::singleton();
+        let mut dir = Vector3::ZERO;
 
-        if event.is_action_pressed("forward") {
-            let basis_z: Vector3 = self.base().get_transform().basis.col_c();
-            self.player_movement_col.dir = -basis_z;
-        } else if event.is_action_pressed("backwards") {
-            let basis_z: Vector3 = self.base().get_transform().basis.col_c();
-            self.player_movement_col.dir = basis_z;
-        } else {
-            self.player_movement_col.dir = Vector3::ZERO
+        let basis = self.base().get_transform().basis;
+        let forward = -basis.col_c();
+        let right = basis.col_a();
+
+        if input.is_action_pressed("forward") {
+            dir += forward;
+        }
+        if input.is_action_pressed("backwards") {
+            dir -= forward;
+        }
+        if input.is_action_pressed("left_rot") {
+            dir -= right;
+        }
+        if input.is_action_pressed("right_rot") {
+            dir += right;
         }
 
-        if event.is_action_pressed("left_rot") {
-            self.base_mut().rotate_y(0.04);
+        if dir.length() > 0.0 {
+            dir = dir.normalized();
         }
-        if event.is_action_pressed("right_rot") {
-            self.base_mut().rotate_y(-0.04);
-        }
+
+        self.player_movement_col.dir = dir;
     }
 
     fn handle_movement(&mut self) {
         let mut velocity = self.base().get_velocity();
-        velocity.z = self.player_movement_col.dir.z * MOVEMENT_SPEED;
+
         velocity.x = self.player_movement_col.dir.x * MOVEMENT_SPEED;
+        velocity.z = self.player_movement_col.dir.z * MOVEMENT_SPEED;
 
         if !self.base().is_on_floor() {
             velocity.y += if velocity.y > -5.0 { GRAVITY } else { 0.0 };
@@ -65,19 +71,16 @@ impl HandlePlayerInput for Player {
         }
 
         if let Ok(mouse_event) = event.try_cast::<InputEventMouseMotion>() {
-            let mouse_relative: Vector2 = mouse_event.get_relative();
+            let delta = mouse_event.get_relative();
 
-            let mut cur_rot = self.player_body.player_camera_base.get_rotation();
-            cur_rot += Vector3::new(-mouse_relative.y * 0.01, -mouse_relative.x * 0.01, 0.0);
+            self.base_mut().rotate_y(-delta.x as f32 * 0.005);
 
-            let x_pitch = cur_rot
+            let mut cam_rot = self.player_body.player_camera_base.get_rotation();
+            cam_rot.x -= delta.y * 0.005;
+            cam_rot.x = cam_rot
                 .x
-                .clamp(deg_to_rad(-80.0) as f32, deg_to_rad(40.0) as f32);
-
-            cur_rot.x = x_pitch;
-
-            self.player_body.player_camera_base.set_rotation(cur_rot);
-            self.rotate_upper_body_with_view();
-        };
+                .clamp(deg_to_rad(-80.0) as f32, deg_to_rad(80.0) as f32);
+            self.player_body.player_camera_base.set_rotation(cam_rot);
+        }
     }
 }

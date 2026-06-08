@@ -13,12 +13,12 @@ impl HandlePlayerBodyMovement for Player {
             .get_global_basis()
             .get_euler();
 
-        self.player_body
-            .player_upper_body
-            .set_global_rotation(Vector3 {
-                x: (0.0),
-                y: (cam_euler.y),
-                z: (0.0),
-            });
+        /*    self.player_body
+        .player_upper_body
+        .set_global_rotation(Vector3 {
+            x: (0.0),
+            y: (cam_euler.y),
+            z: (0.0),
+        }); */
     }
 }

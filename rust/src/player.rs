@@ -16,7 +16,6 @@ struct Player {
 
 struct PlayerBodyParts {
     player_camera_base: OnReady<Gd<Node3D>>,
-    player_upper_body: OnReady<Gd<Node3D>>,
 }
 
 #[godot_api]
@@ -27,7 +26,6 @@ impl ICharacterBody3D for Player {
             player_movement_col: PlayerInputCollection::default(),
             player_body: PlayerBodyParts {
                 player_camera_base: OnReady::manual(),
-                player_upper_body: OnReady::manual(),
             },
         }
     }
@@ -39,9 +37,9 @@ impl ICharacterBody3D for Player {
 
     fn process(&mut self, delta: f64) {
         // for now set cam pos every frame should be done smoothly
-        let s_pos = self.base().get_position();
+        /* let s_pos = self.base().get_position();
         self.player_body.player_camera_base.set_position(s_pos);
-        self.player_body.player_upper_body.set_position(s_pos);
+        self.player_body.player_upper_body.set_position(s_pos); */
     }
 
     fn input(&mut self, event: Gd<InputEvent>) {
@@ -54,9 +52,9 @@ impl ICharacterBody3D for Player {
         self.player_body
             .player_camera_base
             .init(self.base().get_node_as::<Node3D>("playercambase"));
-        self.player_body
-            .player_upper_body
-            .init(self.base().get_node_as::<Node3D>("upperBody"));
+        /*  self.player_body
+        .player_upper_body
+        .init(self.base().get_node_as::<Node3D>("upperBody")); */
     }
 }
 
