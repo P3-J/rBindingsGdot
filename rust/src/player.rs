@@ -1,4 +1,4 @@
-use godot::classes::{CharacterBody3D, ICharacterBody3D, InputEvent};
+use godot::classes::{CharacterBody3D, ICharacterBody3D, InputEvent, Node, RayCast3D};
 use godot::prelude::*;
 
 use crate::player::player_movement::{HandlePlayerInput, PlayerInputCollection};
@@ -12,6 +12,9 @@ struct Player {
     base: Base<CharacterBody3D>,
     player_movement_col: PlayerInputCollection,
     player_body: PlayerBodyParts,
+
+    #[export]
+    player_raycast: Option<Gd<RayCast3D>>,
 }
 
 struct PlayerBodyParts {
@@ -27,6 +30,7 @@ impl ICharacterBody3D for Player {
             player_body: PlayerBodyParts {
                 player_camera_base: OnReady::manual(),
             },
+            player_raycast: None,
         }
     }
 
@@ -40,6 +44,7 @@ impl ICharacterBody3D for Player {
         /* let s_pos = self.base().get_position();
         self.player_body.player_camera_base.set_position(s_pos);
         self.player_body.player_upper_body.set_position(s_pos); */
+        self.handle_r_cast();
     }
 
     fn input(&mut self, event: Gd<InputEvent>) {
@@ -65,5 +70,22 @@ impl Player {
         godot_print!("scream_hello called");
         let mut ebus = self.base().get_node_as::<Node>("/root/EventBus");
         ebus.emit_signal("scream_hello", &["hello".to_variant()]);
+    }
+
+    #[func]
+    fn handle_r_cast(&mut self) {
+        let Some(rayc) = &self.player_raycast else {
+            return;
+        };
+
+        let collider = rayc.get_collider();
+
+        if let Some(collider) = collider {
+            if let Ok(collider_node) = collider.try_cast::<Node>() {
+                if collider_node.is_in_group("car") {
+                    godot_print!("car");
+                }
+            }
+        }
     }
 }

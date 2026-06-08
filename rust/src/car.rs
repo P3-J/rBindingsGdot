@@ -1,4 +1,4 @@
-use godot::classes::{IVehicleBody3D, Input, VehicleBody3D};
+use godot::classes::{Camera3D, IVehicleBody3D, Input, VehicleBody3D};
 use godot::global::move_toward;
 use godot::prelude::*;
 
@@ -7,6 +7,9 @@ use godot::prelude::*;
 struct PlayerCar {
     base: Base<VehicleBody3D>,
     inputs: Gd<Input>,
+    enabled: bool,
+    #[export]
+    car_cam: Option<Gd<Camera3D>>,
 }
 
 #[godot_api]
@@ -15,10 +18,20 @@ impl IVehicleBody3D for PlayerCar {
         Self {
             base,
             inputs: Input::singleton(),
+            enabled: false,
+            car_cam: None,
         }
     }
 
     fn physics_process(&mut self, delta: f64) {
+        if !self.enabled {
+            return;
+        }
+
+        if let Some(car_camera) = &self.car_cam {
+            car_camera.is_current();
+        }
+
         let current_steering = self.base().get_steering() as f64;
 
         let steering = move_toward(

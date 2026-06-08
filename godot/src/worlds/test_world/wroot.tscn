@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cwu5cf7a0awcd" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_xbpvu"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_8p07h"]
 [ext_resource type="Texture2D" uid="uid://cyg2snr1w5xw5" path="res://addons/func_godot/textures/default_texture.png" id="3_hpwco"]
+[ext_resource type="PackedScene" uid="uid://bvmjrs5mh5lwn" path="res://src/chars/car/car.tscn" id="4_8p07h"]
 [ext_resource type="Material" uid="uid://bvy0h71vfj08y" path="res://addons/func_godot/textures/CNBT2_3.tres" id="4_iik15"]
 [ext_resource type="Material" uid="uid://cs08q4ecgm3a" path="res://addons/func_godot/textures/road.tres" id="5_5kkx2"]
 [ext_resource type="Material" uid="uid://dhd2xyl6u1p7d" path="res://addons/func_godot/textures/CNBY2_2.tres" id="6_h6ygg"]
@@ -259,3 +260,6 @@ shape = SubResource("ConvexPolygonShape3D_8kfed")
 
 [node name="Player" parent="." unique_id=56759720 instance=ExtResource("7_iik15")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.0524116, -11.991198)
+
+[node name="car" parent="." unique_id=824179463 instance=ExtResource("4_8p07h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.213535, -21.155556)
