@@ -1,6 +1,11 @@
-use godot::classes::{CharacterBody3D, ICharacterBody3D, InputEvent, Marker3D, Node, RayCast3D};
+use godot::classes::input::MouseMode;
+use godot::classes::{
+    CharacterBody3D, ICharacterBody3D, Input, InputEvent, Marker3D, Node, RayCast3D,
+};
 use godot::prelude::*;
 
+use crate::coin::Coin;
+use crate::player::player_coin_controller::HandlePlayerCoinInput;
 use crate::player::player_movement::{HandlePlayerInput, PlayerInputCollection};
 
 mod player_body_movement;
@@ -12,6 +17,7 @@ mod player_movement;
 struct Player {
     base: Base<CharacterBody3D>,
     player_movement_col: PlayerInputCollection,
+    player_props: PlayerProps,
     player_body: PlayerBodyParts,
 
     #[export]
@@ -26,6 +32,10 @@ struct PlayerBodyParts {
     player_camera_base: OnReady<Gd<Node3D>>,
 }
 
+struct PlayerProps {
+    coin_in_hand: Option<Gd<Coin>>,
+}
+
 #[godot_api]
 impl ICharacterBody3D for Player {
     fn init(base: Base<CharacterBody3D>) -> Self {
@@ -35,6 +45,7 @@ impl ICharacterBody3D for Player {
             player_body: PlayerBodyParts {
                 player_camera_base: OnReady::manual(),
             },
+            player_props: PlayerProps { coin_in_hand: None },
             player_raycast: None,
             player_coin_spot: None,
             player_coin_model: None,
@@ -57,6 +68,7 @@ impl ICharacterBody3D for Player {
     fn input(&mut self, event: Gd<InputEvent>) {
         self.handle_camera_input(&event);
         self.handle_action_input(&event);
+        self.throw_coin_in_hand(&event);
     }
 
     fn ready(&mut self) {
@@ -65,6 +77,9 @@ impl ICharacterBody3D for Player {
         self.player_body
             .player_camera_base
             .init(self.base().get_node_as::<Node3D>("playercambase"));
+
+        let mut is = Input::singleton();
+        is.set_mouse_mode(MouseMode::CAPTURED);
         /*  self.player_body
         .player_upper_body
         .init(self.base().get_node_as::<Node3D>("upperBody")); */
