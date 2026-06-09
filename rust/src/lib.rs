@@ -1,6 +1,7 @@
 use godot::prelude::*;
 
 mod car;
+mod coin;
 mod player;
 mod world;
 

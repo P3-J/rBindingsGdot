@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://cs08q4ecgm3a" path="res://addons/func_godot/textures/road.tres" id="5_5kkx2"]
 [ext_resource type="Material" uid="uid://dhd2xyl6u1p7d" path="res://addons/func_godot/textures/CNBY2_2.tres" id="6_h6ygg"]
 [ext_resource type="PackedScene" uid="uid://hoxdtxfvau6r" path="res://src/chars/player/player.tscn" id="7_iik15"]
+[ext_resource type="PackedScene" uid="uid://5lfuaaixv52v" path="res://src/assets/coin.tscn" id="9_h6ygg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8p07h"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -263,3 +264,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.0524116, -11.991198)
 
 [node name="car" parent="." unique_id=824179463 instance=ExtResource("4_8p07h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.213535, -21.155556)
+
+[node name="coin" parent="." unique_id=62922968 instance=ExtResource("9_h6ygg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.828723, -15.014619)

@@ -1,4 +1,5 @@
 use crate::player::Player;
+use crate::player::player_coin_controller::HandlePlayerCoinInput;
 use godot::classes::{Input, InputEvent, InputEventMouseMotion};
 use godot::global::deg_to_rad;
 use godot::prelude::*;
@@ -19,7 +20,8 @@ impl Default for PlayerInputCollection {
 pub trait HandlePlayerInput {
     fn handle_input(&mut self);
     fn handle_movement(&mut self);
-    fn handle_camera_input(&mut self, event: Gd<InputEvent>);
+    fn handle_camera_input(&mut self, event: &Gd<InputEvent>);
+    fn handle_action_input(&mut self, event: &Gd<InputEvent>);
 }
 
 impl HandlePlayerInput for Player {
@@ -65,12 +67,13 @@ impl HandlePlayerInput for Player {
         self.base_mut().move_and_slide();
     }
 
-    fn handle_camera_input(&mut self, event: Gd<InputEvent>) {
+    fn handle_camera_input(&mut self, event: &Gd<InputEvent>) {
         if !self.player_body.player_camera_base.is_node_ready() {
             return;
         }
 
-        if let Ok(mouse_event) = event.try_cast::<InputEventMouseMotion>() {
+        let event_copy = event.clone();
+        if let Ok(mouse_event) = event_copy.try_cast::<InputEventMouseMotion>() {
             let delta = mouse_event.get_relative();
 
             self.base_mut().rotate_y(-delta.x as f32 * 0.005);
@@ -81,6 +84,12 @@ impl HandlePlayerInput for Player {
                 .x
                 .clamp(deg_to_rad(-80.0) as f32, deg_to_rad(80.0) as f32);
             self.player_body.player_camera_base.set_rotation(cam_rot);
+        }
+    }
+
+    fn handle_action_input(&mut self, event: &Gd<InputEvent>) {
+        if event.is_action_pressed("spawn_coin") {
+            self.spawn_coin_in_hand();
         }
     }
 }

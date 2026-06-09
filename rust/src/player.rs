@@ -1,9 +1,10 @@
-use godot::classes::{CharacterBody3D, ICharacterBody3D, InputEvent, Node, RayCast3D};
+use godot::classes::{CharacterBody3D, ICharacterBody3D, InputEvent, Marker3D, Node, RayCast3D};
 use godot::prelude::*;
 
 use crate::player::player_movement::{HandlePlayerInput, PlayerInputCollection};
 
 mod player_body_movement;
+mod player_coin_controller;
 mod player_movement;
 
 #[derive(GodotClass)]
@@ -15,6 +16,10 @@ struct Player {
 
     #[export]
     player_raycast: Option<Gd<RayCast3D>>,
+    #[export]
+    player_coin_spot: Option<Gd<Marker3D>>,
+    #[export]
+    player_coin_model: Option<Gd<PackedScene>>,
 }
 
 struct PlayerBodyParts {
@@ -31,6 +36,8 @@ impl ICharacterBody3D for Player {
                 player_camera_base: OnReady::manual(),
             },
             player_raycast: None,
+            player_coin_spot: None,
+            player_coin_model: None,
         }
     }
 
@@ -48,7 +55,8 @@ impl ICharacterBody3D for Player {
     }
 
     fn input(&mut self, event: Gd<InputEvent>) {
-        self.handle_camera_input(event);
+        self.handle_camera_input(&event);
+        self.handle_action_input(&event);
     }
 
     fn ready(&mut self) {
