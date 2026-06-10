@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://djuhv0jtu86p4"]
+
+[ext_resource type="PackedScene" uid="uid://5lfuaaixv52v" path="res://src/assets/coin.tscn" id="1_vm34e"]
+
+[node name="NpcThrowSpot" type="NpcThrowSpot" unique_id=601986023]
+coin_model = ExtResource("1_vm34e")
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=24471326]
+target_position = Vector3(5, 0, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
