@@ -1,19 +1,22 @@
 [gd_scene format=3 uid="uid://5lfuaaixv52v"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0tdjd"]
-friction = 0.5
-bounce = 0.49
+friction = 0.31
+bounce = 0.57
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_e68yd"]
 top_radius = 0.25
 bottom_radius = 0.25
-height = 0.1
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_168a2"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_168a2"]
-height = 0.1
+height = 0.2
 radius = 0.25
 
-[node name="coin" type="Coin" unique_id=371303841]
+[node name="coin" type="Coin" unique_id=371303841 node_paths=PackedStringArray("coin_body_mesh")]
+coin_body_mesh = NodePath("coin_mesh")
 mass = 5.0
 physics_material_override = SubResource("PhysicsMaterial_0tdjd")
 sleeping = true
@@ -22,6 +25,7 @@ freeze = true
 
 [node name="coin_mesh" type="MeshInstance3D" parent="." unique_id=65623175]
 mesh = SubResource("CylinderMesh_e68yd")
+surface_material_override/0 = SubResource("StandardMaterial3D_168a2")
 
 [node name="coin_collision" type="CollisionShape3D" parent="." unique_id=2114164224]
 shape = SubResource("CylinderShape3D_168a2")

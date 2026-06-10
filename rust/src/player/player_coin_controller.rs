@@ -18,7 +18,12 @@ impl HandlePlayerCoinInput for Player {
             return;
         };
 
+        if self.player_props.coin_in_hand.is_some() {
+            return;
+        }
+
         let coin = coin_scene.instantiate_as::<Coin>();
+        coin.clone().bind_mut().set_owner(true);
 
         coin_spot.add_child(&coin.clone().upcast::<Node>());
         self.player_props.coin_in_hand = Some(coin);
