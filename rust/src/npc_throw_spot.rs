@@ -63,8 +63,9 @@ impl NpcThrowSpot {
         };
 
         let scene = self.base_mut().get_tree().get_current_scene().unwrap();
+        let wall = scene.get_node_as::<Node3D>("arena1/coin_loc_parent");
 
-        coin.clone().upcast::<Node>().reparent(&scene);
+        coin.clone().upcast::<Node>().reparent(&wall);
 
         let (dir, str) = self.gen_random_throw_dir();
         coin.clone().bind_mut().launch_coin(dir, str);

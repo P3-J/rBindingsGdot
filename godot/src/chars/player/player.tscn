@@ -5,7 +5,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_mmxxm"]
 radius = 1.0
 
-[node name="Player" type="Player" unique_id=56759720 node_paths=PackedStringArray("player_raycast", "player_coin_spot")]
+[node name="Player" type="Player" unique_id=56759720 node_paths=PackedStringArray("player_raycast", "player_coin_spot") groups=["player"]]
 player_raycast = NodePath("playercambase/player_raycast")
 player_coin_spot = NodePath("playercambase/coin_spot")
 player_coin_model = ExtResource("1_4u3w3")

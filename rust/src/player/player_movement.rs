@@ -9,11 +9,15 @@ const MOVEMENT_SPEED: f32 = 10.0;
 
 pub struct PlayerInputCollection {
     pub dir: Vector3,
+    pub player_locked_in_place: bool,
 }
 
 impl Default for PlayerInputCollection {
     fn default() -> Self {
-        Self { dir: Vector3::ZERO }
+        Self {
+            dir: Vector3::ZERO,
+            player_locked_in_place: false,
+        }
     }
 }
 
@@ -22,6 +26,7 @@ pub trait HandlePlayerInput {
     fn handle_movement(&mut self);
     fn handle_camera_input(&mut self, event: &Gd<InputEvent>);
     fn handle_action_input(&mut self, event: &Gd<InputEvent>);
+    fn set_player_locked_in_place(&mut self, state: bool);
 }
 
 impl HandlePlayerInput for Player {
@@ -91,5 +96,9 @@ impl HandlePlayerInput for Player {
         if event.is_action_pressed("spawn_coin") {
             self.spawn_coin_in_hand();
         }
+    }
+
+    fn set_player_locked_in_place(&mut self, state: bool) {
+        self.player_movement_col.player_locked_in_place = state;
     }
 }

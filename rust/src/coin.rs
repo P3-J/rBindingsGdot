@@ -5,22 +5,25 @@ use godot::prelude::*;
 #[class(base=RigidBody3D)]
 pub struct Coin {
     base: Base<RigidBody3D>,
-    owner: Option<CoinOwners>,
+    owner: CoinOwners,
     #[export]
     coin_body_mesh: Option<Gd<MeshInstance3D>>,
 }
 
-enum CoinOwners {
+pub enum CoinOwners {
     PLAYER,
     NPC,
 }
+
+const LAUNCH_ARC_STRENGTH: f32 = 0.9;
+const FLIP_TORQUE: f32 = 16.0;
 
 #[godot_api]
 impl IRigidBody3D for Coin {
     fn init(base: Base<RigidBody3D>) -> Self {
         Self {
             base,
-            owner: None,
+            owner: CoinOwners::PLAYER,
             coin_body_mesh: None,
         }
     }
@@ -53,32 +56,27 @@ impl Coin {
 
         let dir = dir.normalized();
 
-        let arc_up = Vector3::UP * strength * 0.9;
+        let arc_up = Vector3::UP * strength * LAUNCH_ARC_STRENGTH;
         let forward = dir * strength;
         let launch_velocity = forward + arc_up;
 
         self.base_mut().set_linear_velocity(launch_velocity);
 
-        let flip_torque = dir.cross(Vector3::UP).normalized() * 2.0 * 8.0;
+        let flip_torque = dir.cross(Vector3::UP).normalized() * FLIP_TORQUE;
         self.base_mut().set_angular_velocity(flip_torque);
     }
     #[func]
     pub fn set_owner(&mut self, player: bool) {
         if player {
-            self.owner = Some(CoinOwners::PLAYER);
+            self.owner = CoinOwners::PLAYER;
         } else {
-            self.owner = Some(CoinOwners::NPC);
+            self.owner = CoinOwners::NPC;
         }
         self.set_color_based_on_owner();
     }
     #[func]
     pub fn set_color_based_on_owner(&mut self) {
-        let Some(owner) = &self.owner else {
-            godot_print!("no owner, cant set color");
-            return;
-        };
-
-        match owner {
+        match &self.owner {
             CoinOwners::NPC => {
                 if let Some(body_mesh) = &mut self.coin_body_mesh {
                     let material = body_mesh
@@ -98,5 +96,12 @@ impl Coin {
                 return;
             }
         }
+    }
+
+    pub fn get_owner_as_string(&mut self) -> String {
+        return match self.owner {
+            CoinOwners::PLAYER => "player".to_string(),
+            CoinOwners::NPC => "npc".to_string(),
+        };
     }
 }

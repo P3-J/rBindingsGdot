@@ -1,5 +1,6 @@
 use godot::prelude::*;
 
+mod arena;
 mod car;
 mod coin;
 mod npc_throw_spot;

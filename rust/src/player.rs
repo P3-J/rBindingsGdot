@@ -10,11 +10,11 @@ use crate::player::player_movement::{HandlePlayerInput, PlayerInputCollection};
 
 mod player_body_movement;
 mod player_coin_controller;
-mod player_movement;
+pub mod player_movement;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
-struct Player {
+pub struct Player {
     base: Base<CharacterBody3D>,
     player_movement_col: PlayerInputCollection,
     player_props: PlayerProps,
@@ -53,6 +53,9 @@ impl ICharacterBody3D for Player {
     }
 
     fn physics_process(&mut self, delta: f64) {
+        if self.player_movement_col.player_locked_in_place {
+            return;
+        }
         self.handle_input();
         self.handle_movement();
     }
@@ -62,7 +65,7 @@ impl ICharacterBody3D for Player {
         /* let s_pos = self.base().get_position();
         self.player_body.player_camera_base.set_position(s_pos);
         self.player_body.player_upper_body.set_position(s_pos); */
-        self.handle_r_cast();
+        //self.handle_r_cast();
     }
 
     fn input(&mut self, event: Gd<InputEvent>) {

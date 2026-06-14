@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://xfqwsm1vx41r"]
+
+[ext_resource type="PackedScene" uid="uid://5lfuaaixv52v" path="res://src/assets/coin.tscn" id="1_4cmr8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e68yd"]
+
+[node name="arena1" type="Arena" unique_id=1384937655 node_paths=PackedStringArray("arena_wall_pointer", "sleeping_coins_timer", "player_arena_area_enter", "coin_loc_parent")]
+arena_wall_pointer = NodePath("arena1_wall")
+sleeping_coins_timer = NodePath("check_sleeping_coins")
+player_arena_area_enter = NodePath("player_game_enter_area")
+coin_loc_parent = NodePath("coin_loc_parent")
+
+[node name="arena1_wall" type="Node3D" parent="." unique_id=614592376]
+
+[node name="check_sleeping_coins" type="Timer" parent="." unique_id=2009874232]
+
+[node name="NpcThrowSpot" type="NpcThrowSpot" parent="." unique_id=537233322]
+coin_model = ExtResource("1_4cmr8")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.031568527, 1.3390489, 14.533562)
+
+[node name="player_game_enter_area" type="Area3D" parent="." unique_id=1098116655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3723807, 1.7562966, 15.796413)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player_game_enter_area" unique_id=848185805]
+shape = SubResource("BoxShape3D_e68yd")
+
+[node name="coin_loc_parent" type="Node3D" parent="." unique_id=613291347]

@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://hoxdtxfvau6r" path="res://src/chars/player/player.tscn" id="7_iik15"]
 [ext_resource type="Material" uid="uid://dbvixlrbxymlg" path="res://addons/func_godot/textures/CNBN2_3.tres" id="8_0gxoi"]
 [ext_resource type="Material" uid="uid://bv66n8piwapyd" path="res://addons/func_godot/textures/CNCB1_3.tres" id="9_n4caf"]
-[ext_resource type="PackedScene" uid="uid://5lfuaaixv52v" path="res://src/assets/coin.tscn" id="12_0tdjd"]
+[ext_resource type="PackedScene" uid="uid://xfqwsm1vx41r" path="res://src/worlds/test_world/arena_template.tscn" id="12_0tdjd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8p07h"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -359,19 +359,10 @@ shape = SubResource("ConvexPolygonShape3D_ymgtq")
 shape = SubResource("ConvexPolygonShape3D_4n33t")
 
 [node name="Player" parent="." unique_id=56759720 instance=ExtResource("7_iik15")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.0524116, -11.991198)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.534864, -35.20493)
 
 [node name="car" parent="." unique_id=824179463 instance=ExtResource("4_8p07h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.213535, -21.155556)
 
-[node name="arena1" type="Node3D" parent="." unique_id=1908857223]
+[node name="arena1" parent="." unique_id=1384937655 instance=ExtResource("12_0tdjd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0458179, 7.7433047, -55.307632)
-
-[node name="arena1_wall" type="Node3D" parent="arena1" unique_id=421458504]
-
-[node name="check_sleeping_coins" type="Timer" parent="arena1" unique_id=1548766157]
-autostart = true
-
-[node name="NpcThrowSpot" type="NpcThrowSpot" parent="arena1" unique_id=1134985800]
-coin_model = ExtResource("12_0tdjd")
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.031568527, 1.3390489, 14.533562)
