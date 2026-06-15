@@ -13,17 +13,6 @@
 [ext_resource type="Material" uid="uid://bv66n8piwapyd" path="res://addons/func_godot/textures/CNCB1_3.tres" id="9_n4caf"]
 [ext_resource type="PackedScene" uid="uid://xfqwsm1vx41r" path="res://src/worlds/test_world/arena_template.tscn" id="12_0tdjd"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8p07h"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-
-[sub_resource type="Sky" id="Sky_hpwco"]
-sky_material = SubResource("ProceduralSkyMaterial_8p07h")
-
-[sub_resource type="Environment" id="Environment_a2ic1"]
-background_mode = 2
-sky = SubResource("Sky_hpwco")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0tdjd"]
 albedo_texture = ExtResource("3_hpwco")
 metallic_specular = 0.0
@@ -239,10 +228,7 @@ points = PackedVector3Array(6, 8.5, -32.5, 6, 3.5, -32.5, -10.5, 8.5, -32.5, -10
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1425266838]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=716836596]
-environment = SubResource("Environment_a2ic1")
+light_energy = 7.0
 
 [node name="FuncGodotMap" type="Node3D" parent="." unique_id=1713886336]
 script = ExtResource("1_xbpvu")

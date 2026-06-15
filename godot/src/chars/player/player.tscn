@@ -1,9 +1,21 @@
 [gd_scene format=3 uid="uid://hoxdtxfvau6r"]
 
 [ext_resource type="PackedScene" uid="uid://5lfuaaixv52v" path="res://src/assets/coin.tscn" id="1_4u3w3"]
+[ext_resource type="Shader" uid="uid://7xqb1ukogu1c" path="res://src/shaders/dither.gdshader" id="2_yupag"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_mmxxm"]
 radius = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_grw7e"]
+shader = ExtResource("2_yupag")
+shader_parameter/aberration_strength = 1.5920000756200001
+shader_parameter/blur_strength = 0.6910000328225
+shader_parameter/noise_strength = 0.048
+shader_parameter/vignette_strength = 0.78
+shader_parameter/scanline_strength = 0.016
+shader_parameter/distortion_strength = 0.1
+shader_parameter/ghost_strength = 0.12
+shader_parameter/flicker_strength = 0.005
 
 [node name="Player" type="Player" unique_id=56759720 node_paths=PackedStringArray("player_raycast", "player_coin_spot") groups=["player"]]
 player_raycast = NodePath("playercambase/player_raycast")
@@ -18,6 +30,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1321546, 0)
 
 [node name="playercam" type="Camera3D" parent="playercambase" unique_id=1911322148]
 current = true
+
+[node name="Control" type="Control" parent="playercambase/playercam" unique_id=1646576727]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="ColorRect" type="ColorRect" parent="playercambase/playercam/Control" unique_id=883945047]
+material = SubResource("ShaderMaterial_grw7e")
+layout_mode = 0
+offset_left = 512.0
+offset_top = 511.99994
+offset_right = 1024.0
+offset_bottom = 1023.99994
+rotation = -3.1415927
 
 [node name="player_raycast" type="RayCast3D" parent="playercambase" unique_id=1112546303]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)

@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://b62feequb3nnt"
+path="res://.godot/imported/bucky.map-95fe4aed016415c7ab037643e1d991fe.tres"
+
+[deps]
+
+source_file="res://src/chars/bucky/bucky.map"
+dest_files=["res://.godot/imported/bucky.map-95fe4aed016415c7ab037643e1d991fe.tres"]
+
+[params]
+

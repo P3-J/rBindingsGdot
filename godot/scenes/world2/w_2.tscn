@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://pg3vsmyf10fx"]
+
+[ext_resource type="PackedScene" uid="uid://b3rt0n0icg13f" path="res://src/chars/bucky/bucky.tscn" id="1_lm2lh"]
+[ext_resource type="Shader" uid="uid://7xqb1ukogu1c" path="res://src/shaders/dither.gdshader" id="2_goaeq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmxxm"]
+shader = ExtResource("2_goaeq")
+shader_parameter/aberration_strength = 3.0
+shader_parameter/blur_strength = 2.0
+shader_parameter/noise_strength = 0.048
+shader_parameter/vignette_strength = 0.78
+shader_parameter/scanline_strength = 0.016
+shader_parameter/distortion_strength = 0.1
+shader_parameter/ghost_strength = 0.12
+shader_parameter/flicker_strength = 0.005
+
+[sub_resource type="Environment" id="Environment_e68yd"]
+background_mode = 1
+background_color = Color(0.5307601, 0.6819983, 0.99635893, 1)
+glow_enabled = true
+fog_light_energy = 3.82
+
+[node name="w2" type="Node3D" unique_id=1849300657]
+
+[node name="bucky" parent="." unique_id=145542737 instance=ExtResource("1_lm2lh")]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=662509794]
+transform = Transform3D(0.61340505, 0.22158884, -0.75804526, 0.016937368, 0.9559204, 0.2931365, 0.78958684, -0.19265069, 0.58261335, -7.953963, 4.6268425, 6.4031305)
+
+[node name="Control" type="Control" parent="Camera3D" unique_id=1394476676]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 192.0
+offset_bottom = 192.0
+
+[node name="ColorRect" type="ColorRect" parent="Camera3D/Control" unique_id=331360965]
+material = SubResource("ShaderMaterial_mmxxm")
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 192.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1771270804]
+environment = SubResource("Environment_e68yd")
