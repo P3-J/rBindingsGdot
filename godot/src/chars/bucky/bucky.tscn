@@ -1,10 +1,84 @@
 [gd_scene format=4 uid="uid://b3rt0n0icg13f"]
 
-[ext_resource type="Script" uid="uid://cwu5cf7a0awcd" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_s3bnp"]
-[ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_5aklo"]
 [ext_resource type="Texture2D" uid="uid://c70klgbw0tffx" path="res://addons/func_godot/textures/CNBR2_5.png" id="3_8cs40"]
 [ext_resource type="Material" uid="uid://dhd2xyl6u1p7d" path="res://addons/func_godot/textures/CNBY2_2.tres" id="4_3pi5h"]
 [ext_resource type="Material" uid="uid://cs08q4ecgm3a" path="res://addons/func_godot/textures/road.tres" id="5_p2euw"]
+[ext_resource type="Shader" uid="uid://7xqb1ukogu1c" path="res://src/shaders/dither.gdshader" id="6_5aklo"]
+
+[sub_resource type="Animation" id="Animation_ca5at"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("charbase/base2/entity_1_func_detail:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("charbase/base2/entity_2_func_detail:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_cogmk"]
+resource_name = "walk"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("charbase/base2/entity_1_func_detail:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 0.73, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.5790721), Vector3(0, 0, 0.35128796), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("charbase/base2/entity_2_func_detail:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33333337, 0.73, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.5794493), Vector3(0, 0, -0.35081118), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4pg1u"]
+_data = {
+&"RESET": SubResource("Animation_ca5at"),
+&"walk": SubResource("Animation_cogmk")
+}
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_e68yd"]
+radius = 1.2206064
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8cs40"]
+shader = ExtResource("6_5aklo")
+shader_parameter/aberration_strength = 3.0
+shader_parameter/blur_strength = 2.0
+shader_parameter/noise_strength = 0.048
+shader_parameter/vignette_strength = 0.78
+shader_parameter/scanline_strength = 0.016
+shader_parameter/distortion_strength = 0.1
+shader_parameter/ghost_strength = 0.12
+shader_parameter/flicker_strength = 0.005
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mynsx"]
 albedo_texture = ExtResource("3_8cs40")
@@ -95,110 +169,73 @@ _surfaces = [{
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_4ptg7"]
 data = PackedVector3Array(0.25, 0.75, -0.25, -0.25, 0.75, -0.25, -0.25, -0.75, -0.25, 0.25, 0.75, -0.25, -0.25, -0.75, -0.25, 0.25, -0.75, -0.25, -0.25, -0.75, 0.25, -0.25, -0.75, -0.25, -0.25, 0.75, -0.25, -0.25, -0.75, 0.25, -0.25, 0.75, -0.25, -0.25, 0.75, 0.25, -0.25, -0.75, 0.25, 0.25, -0.75, 0.25, 0.25, -0.75, -0.25, -0.25, -0.75, 0.25, 0.25, -0.75, -0.25, -0.25, -0.75, -0.25, -0.25, 0.75, 0.25, -0.25, 0.75, -0.25, 0.25, 0.75, -0.25, -0.25, 0.75, 0.25, 0.25, 0.75, -0.25, 0.25, 0.75, 0.25, 0.25, 0.75, 0.25, 0.25, 0.75, -0.25, 0.25, -0.75, -0.25, 0.25, 0.75, 0.25, 0.25, -0.75, -0.25, 0.25, -0.75, 0.25, 0.25, -0.75, 0.25, -0.25, -0.75, 0.25, -0.25, 0.75, 0.25, 0.25, -0.75, 0.25, -0.25, 0.75, 0.25, 0.25, 0.75, 0.25)
 
-[sub_resource type="Animation" id="Animation_ca5at"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FuncGodotMap/entity_1_func_detail:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FuncGodotMap/entity_2_func_detail:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_cogmk"]
-resource_name = "walk"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FuncGodotMap/entity_1_func_detail:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.33333334, 0.73, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.5790721), Vector3(0, 0, 0.35128796), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FuncGodotMap/entity_2_func_detail:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.33333337, 0.73, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.5794493), Vector3(0, 0, -0.35081118), Vector3(0, 0, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_4pg1u"]
-_data = {
-&"RESET": SubResource("Animation_ca5at"),
-&"walk": SubResource("Animation_cogmk")
-}
-
-[node name="bucky" type="CharacterBody3D" unique_id=145542737]
-
-[node name="FuncGodotMap" type="Node3D" parent="." unique_id=803983784]
-script = ExtResource("1_s3bnp")
-local_map_file = "uid://b62feequb3nnt"
-map_settings = ExtResource("2_5aklo")
-metadata/_custom_type_script = "uid://cwu5cf7a0awcd"
-
-[node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" unique_id=1071570506]
-collision_mask = 0
-
-[node name="entity_0_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_0_worldspawn" unique_id=819689950]
-mesh = SubResource("ArrayMesh_uao55")
-
-[node name="entity_0_brush_0_collision_shape" type="CollisionShape3D" parent="FuncGodotMap/entity_0_worldspawn" unique_id=1358056754]
-shape = SubResource("ConvexPolygonShape3D_m4cgi")
-
-[node name="entity_0_brush_1_collision_shape" type="CollisionShape3D" parent="FuncGodotMap/entity_0_worldspawn" unique_id=945651728]
-shape = SubResource("ConvexPolygonShape3D_2c2b8")
-
-[node name="entity_0_brush_2_collision_shape" type="CollisionShape3D" parent="FuncGodotMap/entity_0_worldspawn" unique_id=1459394154]
-shape = SubResource("ConvexPolygonShape3D_y32ka")
-
-[node name="entity_1_func_detail" type="StaticBody3D" parent="FuncGodotMap" unique_id=1505902117]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0.25, -0.75, 0.75)
-collision_mask = 0
-
-[node name="entity_1_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_1_func_detail" unique_id=1689922870]
-mesh = SubResource("ArrayMesh_4bo2h")
-
-[node name="entity_1_collision_shape" type="CollisionShape3D" parent="FuncGodotMap/entity_1_func_detail" unique_id=956683389]
-shape = SubResource("ConcavePolygonShape3D_7two3")
-
-[node name="entity_2_func_detail" type="StaticBody3D" parent="FuncGodotMap" unique_id=1245563894]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.75, -0.25)
-collision_mask = 0
-
-[node name="entity_2_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_2_func_detail" unique_id=792429614]
-mesh = SubResource("ArrayMesh_lw0kn")
-
-[node name="entity_2_collision_shape" type="CollisionShape3D" parent="FuncGodotMap/entity_2_func_detail" unique_id=1060763806]
-shape = SubResource("ConcavePolygonShape3D_4ptg7")
+[node name="bucky" type="Bucky" unique_id=1272556131 node_paths=PackedStringArray("camera_base", "char_body_base")]
+camera_base = NodePath("Camera3D")
+char_body_base = NodePath("charbase")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=356999494]
 libraries/ = SubResource("AnimationLibrary_4pg1u")
 autoplay = &"walk"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=479421915]
+shape = SubResource("SphereShape3D_e68yd")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1233319799]
+transform = Transform3D(-0.49966598, -0.24585223, 0.83059657, 0.016937388, 0.9559206, 0.29313663, -0.8660526, 0.16053852, -0.47347692, 6.84162, 4.6268425, -1.8155198)
+
+[node name="Control" type="Control" parent="Camera3D" unique_id=2054083447]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 192.0
+offset_bottom = 192.0
+
+[node name="ColorRect" type="ColorRect" parent="Camera3D/Control" unique_id=911347275]
+material = SubResource("ShaderMaterial_8cs40")
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 192.0
+
+[node name="charbase" type="Node3D" parent="." unique_id=1898209574]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
+
+[node name="base2" type="Node3D" parent="charbase" unique_id=35344002]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="entity_0_worldspawn" type="StaticBody3D" parent="charbase/base2" unique_id=1071570506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3111951, 0, -0.2183778)
+collision_layer = 0
+collision_mask = 0
+
+[node name="entity_0_mesh_instance" type="MeshInstance3D" parent="charbase/base2/entity_0_worldspawn" unique_id=819689950]
+mesh = SubResource("ArrayMesh_uao55")
+
+[node name="entity_0_brush_0_collision_shape" type="CollisionShape3D" parent="charbase/base2/entity_0_worldspawn" unique_id=1358056754]
+shape = SubResource("ConvexPolygonShape3D_m4cgi")
+
+[node name="entity_0_brush_1_collision_shape" type="CollisionShape3D" parent="charbase/base2/entity_0_worldspawn" unique_id=945651728]
+shape = SubResource("ConvexPolygonShape3D_2c2b8")
+
+[node name="entity_0_brush_2_collision_shape" type="CollisionShape3D" parent="charbase/base2/entity_0_worldspawn" unique_id=1459394154]
+shape = SubResource("ConvexPolygonShape3D_y32ka")
+
+[node name="entity_1_func_detail" type="StaticBody3D" parent="charbase/base2" unique_id=1505902117]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0.04820942, -0.46438852, 0.5256297)
+collision_layer = 0
+collision_mask = 0
+
+[node name="entity_1_mesh_instance" type="MeshInstance3D" parent="charbase/base2/entity_1_func_detail" unique_id=1689922870]
+mesh = SubResource("ArrayMesh_4bo2h")
+
+[node name="entity_1_collision_shape" type="CollisionShape3D" parent="charbase/base2/entity_1_func_detail" unique_id=956683389]
+shape = SubResource("ConcavePolygonShape3D_7two3")
+
+[node name="entity_2_func_detail" type="StaticBody3D" parent="charbase/base2" unique_id=1245563894]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.009792327, -0.4494352, -0.37748092)
+collision_layer = 0
+collision_mask = 0
+
+[node name="entity_2_mesh_instance" type="MeshInstance3D" parent="charbase/base2/entity_2_func_detail" unique_id=792429614]
+mesh = SubResource("ArrayMesh_lw0kn")
+
+[node name="entity_2_collision_shape" type="CollisionShape3D" parent="charbase/base2/entity_2_func_detail" unique_id=1060763806]
+shape = SubResource("ConcavePolygonShape3D_4ptg7")
