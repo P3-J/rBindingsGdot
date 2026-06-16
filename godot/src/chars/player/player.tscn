@@ -8,7 +8,7 @@ radius = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_grw7e"]
 shader = ExtResource("2_yupag")
-shader_parameter/aberration_strength = 1.5920000756200001
+shader_parameter/aberration_strength = 1.59200007562
 shader_parameter/blur_strength = 0.6910000328225
 shader_parameter/noise_strength = 0.048
 shader_parameter/vignette_strength = 0.78
@@ -38,6 +38,7 @@ offset_right = 512.0
 offset_bottom = 512.0
 
 [node name="ColorRect" type="ColorRect" parent="playercambase/playercam/Control" unique_id=883945047]
+visible = false
 material = SubResource("ShaderMaterial_grw7e")
 layout_mode = 0
 offset_left = 512.0

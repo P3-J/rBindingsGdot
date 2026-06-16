@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dqy16yh8nbkgk"]
+
+[ext_resource type="Texture2D" uid="uid://76pkq5u8280u" path="res://addons/func_godot/textures/CNBR1_1.png" id="1_r4m28"]
+
+[resource]
+albedo_texture = ExtResource("1_r4m28")
+metallic_specular = 0.0
+texture_filter = 2

@@ -1,11 +1,36 @@
-use godot::classes::{Camera3D, CharacterBody3D, ICharacterBody3D, Input};
+use godot::classes::{
+    Camera3D, CharacterBody3D, ICharacterBody3D, Input, PhysicsRayQueryParameters3D,
+};
 use godot::prelude::*;
+
+const SPEED: f32 = 8.0;
+const ACCELERATION: f32 = 14.0;
+const FRICTION: f32 = 10.0;
+
+const JUMP_VELOCITY: f32 = 20.0;
+const DOUBLE_JUMP_VELOCITY: f32 = 20.0;
+const FALL_GRAVITY: f32 = 45.0;
+const JUMP_GRAVITY: f32 = 50.0;
+
+const WALL_HOP_VELOCITY: f32 = 20.0;
+const WALL_HOP_NORMAL_FORCE: f32 = 25.0;
+const WALL_SLIDE_GRAVITY: f32 = 2.0;
+const WALL_SLIDE_SPEED_MAX: f32 = 2.0;
+
+const TURN_SPEED: f32 = 12.0;
+const WALL_RAY_LENGTH: f32 = 1.5;
+const WALL_RAY_HEIGHT: f32 = 0.8;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
 pub struct Bucky {
     base: Base<CharacterBody3D>,
     movement_dir: Vector3,
+    jumps_remaining: i32,
+    is_wall_sliding: bool,
+    wall_normal: Vector3,
+    has_wall_jumped: bool,
+
     #[export]
     camera_base: Option<Gd<Camera3D>>,
     #[export]
@@ -18,14 +43,18 @@ impl ICharacterBody3D for Bucky {
         Self {
             base,
             movement_dir: Vector3::ZERO,
+            jumps_remaining: 2,
+            is_wall_sliding: false,
+            wall_normal: Vector3::ZERO,
+            has_wall_jumped: false,
             camera_base: None,
             char_body_base: None,
         }
     }
 
-    fn process(&mut self, delta: f32) {
+    fn process(&mut self, delta: f64) {
         self.handle_input();
-        self.handle_movement();
+        self.handle_movement(delta as f32);
     }
 }
 
@@ -34,10 +63,7 @@ impl Bucky {
         let input = Input::singleton();
         let mut dir = Vector3::ZERO;
 
-        let Some(cam) = &self.camera_base else {
-            return;
-        };
-
+        let Some(cam) = &self.camera_base else { return };
         let basis = cam.get_global_transform().basis;
         let forward = -basis.col_c();
         let right = basis.col_a();
@@ -56,38 +82,132 @@ impl Bucky {
         }
 
         dir.y = 0.0;
-
         if dir.length() > 0.0 {
             dir = dir.normalized();
         }
-
         self.movement_dir = dir;
-        self.turn_body_towards_dir();
     }
 
-    fn turn_body_towards_dir(&mut self) {
+    fn check_wall_contact(&self) -> Option<Vector3> {
+        let Some(char_body) = &self.char_body_base else {
+            return None;
+        };
+
+        let char_pos = self.base().get_global_position() + Vector3::new(0.0, WALL_RAY_HEIGHT, 0.0);
+        let facing = -char_body.get_global_transform().basis.col_c();
+
+        let world = self.base().get_world_3d()?;
+        let mut space = world.get_direct_space_state()?;
+
+        let mut params = PhysicsRayQueryParameters3D::new_gd();
+        params.set_from(char_pos);
+        params.set_to(char_pos + facing * WALL_RAY_LENGTH);
+        params.set_exclude(&array![self.base().get_rid()]);
+
+        let result = space.intersect_ray(&params);
+        if result.is_empty() {
+            return None;
+        }
+
+        let normal: Vector3 = result.get("normal")?.to();
+        Some(normal)
+    }
+
+    fn handle_movement(&mut self, delta: f32) {
+        let on_floor = self.base().is_on_floor();
+        let input = Input::singleton();
+        let mut velocity = self.base().get_velocity();
+
+        if on_floor {
+            self.jumps_remaining = 2;
+            self.is_wall_sliding = false;
+            self.has_wall_jumped = false;
+        }
+
+        self.is_wall_sliding = false;
+        if !on_floor && velocity.y < 0.0 && !self.has_wall_jumped {
+            if let Some(normal) = self.check_wall_contact() {
+                self.wall_normal = normal;
+                self.is_wall_sliding = true;
+            }
+        }
+
+        if !on_floor {
+            let gravity = if self.is_wall_sliding {
+                WALL_SLIDE_GRAVITY
+            } else if velocity.y > 0.0 {
+                JUMP_GRAVITY
+            } else {
+                FALL_GRAVITY
+            };
+            velocity.y -= gravity * delta;
+
+            if self.is_wall_sliding && velocity.y < -WALL_SLIDE_SPEED_MAX {
+                velocity.y = -WALL_SLIDE_SPEED_MAX;
+            }
+        }
+
+        if input.is_action_just_pressed("jump") {
+            if self.is_wall_sliding {
+                velocity.x = self.wall_normal.x * WALL_HOP_NORMAL_FORCE;
+                velocity.z = self.wall_normal.z * WALL_HOP_NORMAL_FORCE;
+                velocity.y = WALL_HOP_VELOCITY;
+                self.is_wall_sliding = false;
+                self.has_wall_jumped = true;
+            } else if on_floor {
+                velocity.y = JUMP_VELOCITY;
+                self.jumps_remaining -= 1;
+            } else if self.jumps_remaining > 0 {
+                velocity.y = DOUBLE_JUMP_VELOCITY;
+                self.jumps_remaining -= 1;
+            }
+        }
+
+        if self.movement_dir.length() > 0.0 {
+            velocity.x = lerp(
+                velocity.x,
+                self.movement_dir.x * SPEED,
+                ACCELERATION * delta,
+            );
+            velocity.z = lerp(
+                velocity.z,
+                self.movement_dir.z * SPEED,
+                ACCELERATION * delta,
+            );
+        } else {
+            velocity.x = lerp(velocity.x, 0.0, FRICTION * delta);
+            velocity.z = lerp(velocity.z, 0.0, FRICTION * delta);
+        }
+
+        self.base_mut().set_velocity(velocity);
+        self.base_mut().move_and_slide();
+
+        self.smooth_turn_body(delta);
+    }
+
+    fn smooth_turn_body(&mut self, delta: f32) {
         let Some(char_body) = &mut self.char_body_base else {
             return;
         };
         if self.movement_dir == Vector3::ZERO {
             return;
         }
-        let current_pos = char_body.get_global_position();
-        let target_pos = current_pos + self.movement_dir;
-        char_body.look_at(target_pos);
+
+        let current_basis = char_body.get_global_transform().basis;
+        let forward = -self.movement_dir.normalized();
+        let right = Vector3::UP.cross(forward).normalized();
+        let real_up = forward.cross(right).normalized();
+        let target_basis = Basis::from_cols(right, real_up, forward);
+
+        let t = (TURN_SPEED * delta).min(1.0);
+        let new_basis = current_basis.slerp(&target_basis, t);
+
+        let mut transform = char_body.get_global_transform();
+        transform.basis = new_basis;
+        char_body.set_global_transform(transform);
     }
+}
 
-    fn handle_movement(&mut self) {
-        let mut velocity = self.base().get_velocity();
-
-        velocity.x = self.movement_dir.x * 5.0;
-        velocity.z = self.movement_dir.z * 5.0;
-
-        if !self.base().is_on_floor() {
-            velocity.y += -5.0;
-        }
-
-        self.base_mut().set_velocity(velocity);
-        self.base_mut().move_and_slide();
-    }
+fn lerp(a: f32, b: f32, t: f32) -> f32 {
+    a + (b - a) * t.clamp(0.0, 1.0)
 }

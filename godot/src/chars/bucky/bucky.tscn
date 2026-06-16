@@ -169,7 +169,7 @@ _surfaces = [{
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_4ptg7"]
 data = PackedVector3Array(0.25, 0.75, -0.25, -0.25, 0.75, -0.25, -0.25, -0.75, -0.25, 0.25, 0.75, -0.25, -0.25, -0.75, -0.25, 0.25, -0.75, -0.25, -0.25, -0.75, 0.25, -0.25, -0.75, -0.25, -0.25, 0.75, -0.25, -0.25, -0.75, 0.25, -0.25, 0.75, -0.25, -0.25, 0.75, 0.25, -0.25, -0.75, 0.25, 0.25, -0.75, 0.25, 0.25, -0.75, -0.25, -0.25, -0.75, 0.25, 0.25, -0.75, -0.25, -0.25, -0.75, -0.25, -0.25, 0.75, 0.25, -0.25, 0.75, -0.25, 0.25, 0.75, -0.25, -0.25, 0.75, 0.25, 0.25, 0.75, -0.25, 0.25, 0.75, 0.25, 0.25, 0.75, 0.25, 0.25, 0.75, -0.25, 0.25, -0.75, -0.25, 0.25, 0.75, 0.25, 0.25, -0.75, -0.25, 0.25, -0.75, 0.25, 0.25, -0.75, 0.25, -0.25, -0.75, 0.25, -0.25, 0.75, 0.25, 0.25, -0.75, 0.25, -0.25, 0.75, 0.25, 0.25, 0.75, 0.25)
 
-[node name="bucky" type="Bucky" unique_id=1272556131 node_paths=PackedStringArray("camera_base", "char_body_base")]
+[node name="bucky" type="Bucky" unique_id=769577246 node_paths=PackedStringArray("camera_base", "char_body_base")]
 camera_base = NodePath("Camera3D")
 char_body_base = NodePath("charbase")
 
@@ -181,9 +181,12 @@ autoplay = &"walk"
 shape = SubResource("SphereShape3D_e68yd")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1233319799]
-transform = Transform3D(-0.49966598, -0.24585223, 0.83059657, 0.016937388, 0.9559206, 0.29313663, -0.8660526, 0.16053852, -0.47347692, 6.84162, 4.6268425, -1.8155198)
+transform = Transform3D(-4.336359e-08, -0.12589756, 0.99204326, -5.503157e-09, 0.99204326, 0.12589756, -1, 0, -4.371139e-08, 7.9014874, 5.027257, 0)
+current = true
+fov = 91.9
 
 [node name="Control" type="Control" parent="Camera3D" unique_id=2054083447]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 192.0
