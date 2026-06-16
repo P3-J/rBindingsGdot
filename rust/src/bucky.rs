@@ -1,10 +1,14 @@
 use godot::classes::{
-    Camera3D, CharacterBody3D, ICharacterBody3D, Input, PhysicsRayQueryParameters3D,
+    AnimationPlayer, Camera3D, CharacterBody3D, ICharacterBody3D, Input,
+    PhysicsRayQueryParameters3D,
 };
 use godot::prelude::*;
 
-const SPEED: f32 = 8.0;
-const ACCELERATION: f32 = 14.0;
+mod bucky_animation_manager;
+use bucky_animation_manager::BuckyAnimationPlayer;
+
+const SPEED: f32 = 14.0;
+const ACCELERATION: f32 = 8.0;
 const FRICTION: f32 = 10.0;
 
 const JUMP_VELOCITY: f32 = 20.0;
@@ -35,6 +39,8 @@ pub struct Bucky {
     camera_base: Option<Gd<Camera3D>>,
     #[export]
     char_body_base: Option<Gd<Node3D>>,
+    #[export]
+    bucky_anim_player: Option<Gd<AnimationPlayer>>,
 }
 
 #[godot_api]
@@ -49,6 +55,7 @@ impl ICharacterBody3D for Bucky {
             has_wall_jumped: false,
             camera_base: None,
             char_body_base: None,
+            bucky_anim_player: None,
         }
     }
 
@@ -134,10 +141,12 @@ impl Bucky {
 
         if !on_floor {
             let gravity = if self.is_wall_sliding {
+                self.play_animation("hang_ledge");
                 WALL_SLIDE_GRAVITY
             } else if velocity.y > 0.0 {
                 JUMP_GRAVITY
             } else {
+                self.play_animation("drop");
                 FALL_GRAVITY
             };
             velocity.y -= gravity * delta;
@@ -145,9 +154,16 @@ impl Bucky {
             if self.is_wall_sliding && velocity.y < -WALL_SLIDE_SPEED_MAX {
                 velocity.y = -WALL_SLIDE_SPEED_MAX;
             }
+        } else {
+            if self.movement_dir.length() > 0.0 {
+                self.play_animation("walk");
+            } else {
+                self.play_animation("reset_soft");
+            }
         }
 
         if input.is_action_just_pressed("jump") {
+            self.play_animation("jump");
             if self.is_wall_sliding {
                 velocity.x = self.wall_normal.x * WALL_HOP_NORMAL_FORCE;
                 velocity.z = self.wall_normal.z * WALL_HOP_NORMAL_FORCE;

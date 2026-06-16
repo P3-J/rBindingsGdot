@@ -12,9 +12,16 @@
 
 [sub_resource type="Environment" id="Environment_e68yd"]
 background_mode = 1
-background_color = Color(0.5307601, 0.6819983, 0.99635893, 1)
+background_color = Color(1, 1, 1, 1)
+tonemap_white = 7.17
 glow_enabled = true
-fog_light_energy = 3.82
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(1, 1, 1, 1)
+fog_light_energy = 1.85
+fog_density = 0.9315
+fog_depth_begin = 50.6
+fog_depth_end = 638.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unukg"]
 albedo_texture = ExtResource("9_u4e7f")

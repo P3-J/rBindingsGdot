@@ -34,17 +34,16 @@ current = true
 [node name="Control" type="Control" parent="playercambase/playercam" unique_id=1646576727]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 512.0
-offset_bottom = 512.0
+offset_right = 256.0
+offset_bottom = 224.0
 
 [node name="ColorRect" type="ColorRect" parent="playercambase/playercam/Control" unique_id=883945047]
-visible = false
 material = SubResource("ShaderMaterial_grw7e")
 layout_mode = 0
-offset_left = 512.0
-offset_top = 511.99994
-offset_right = 1024.0
-offset_bottom = 1023.99994
+offset_left = 255.99997
+offset_top = 225.99994
+offset_right = 511.99997
+offset_bottom = 451.99988
 rotation = -3.1415927
 
 [node name="player_raycast" type="RayCast3D" parent="playercambase" unique_id=1112546303]

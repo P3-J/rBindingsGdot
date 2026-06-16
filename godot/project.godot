@@ -21,8 +21,8 @@ EventBus="*uid://bwhl08ecdxe5v"
 
 [display]
 
-window/size/viewport_width=192
-window/size/viewport_height=192
+window/size/viewport_width=320
+window/size/viewport_height=240
 window/stretch/mode="viewport"
 
 [editor_plugins]
