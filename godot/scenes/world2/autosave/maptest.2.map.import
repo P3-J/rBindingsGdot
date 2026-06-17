@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://devjv5asy6yru"
+path="res://.godot/imported/maptest.2.map-a1653faf1b0cb24713831f1520f2146f.tres"
+
+[deps]
+
+source_file="res://scenes/world2/autosave/maptest.2.map"
+dest_files=["res://.godot/imported/maptest.2.map-a1653faf1b0cb24713831f1520f2146f.tres"]
+
+[params]
+

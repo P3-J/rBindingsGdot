@@ -1,7 +1,9 @@
+use godot::classes::input::MouseMode;
 use godot::classes::{
-    AnimationPlayer, Camera3D, CharacterBody3D, ICharacterBody3D, Input,
-    PhysicsRayQueryParameters3D,
+    AnimationPlayer, Camera3D, CharacterBody3D, GpuParticles3D, ICharacterBody3D, Input,
+    InputEvent, InputEventMouseMotion, PhysicsRayQueryParameters3D,
 };
+use godot::global::deg_to_rad;
 use godot::prelude::*;
 
 mod bucky_animation_manager;
@@ -41,6 +43,10 @@ pub struct Bucky {
     char_body_base: Option<Gd<Node3D>>,
     #[export]
     bucky_anim_player: Option<Gd<AnimationPlayer>>,
+    #[export]
+    bucky_jump_particle: Option<Gd<GpuParticles3D>>,
+    #[export]
+    bucky_camera_base: Option<Gd<Node3D>>,
 }
 
 #[godot_api]
@@ -56,12 +62,23 @@ impl ICharacterBody3D for Bucky {
             camera_base: None,
             char_body_base: None,
             bucky_anim_player: None,
+            bucky_jump_particle: None,
+            bucky_camera_base: None,
         }
     }
 
     fn process(&mut self, delta: f64) {
         self.handle_input();
         self.handle_movement(delta as f32);
+    }
+
+    fn input(&mut self, event: Gd<InputEvent>) {
+        self.handle_camera_input(&event);
+    }
+
+    fn ready(&mut self) {
+        let mut is = Input::singleton();
+        is.set_mouse_mode(MouseMode::CAPTURED);
     }
 }
 
@@ -163,7 +180,7 @@ impl Bucky {
         }
 
         if input.is_action_just_pressed("jump") {
-            self.play_animation("jump");
+            self.handle_jump_externals();
             if self.is_wall_sliding {
                 velocity.x = self.wall_normal.x * WALL_HOP_NORMAL_FORCE;
                 velocity.z = self.wall_normal.z * WALL_HOP_NORMAL_FORCE;
@@ -221,6 +238,34 @@ impl Bucky {
         let mut transform = char_body.get_global_transform();
         transform.basis = new_basis;
         char_body.set_global_transform(transform);
+    }
+
+    fn handle_jump_externals(&mut self) {
+        self.play_animation("jump");
+        self.play_particle("jump");
+    }
+
+    fn handle_camera_input(&mut self, event: &Gd<InputEvent>) {
+        let event_copy = event.clone();
+        let Ok(mouse_event) = event_copy.try_cast::<InputEventMouseMotion>() else {
+            return;
+        };
+        let delta = mouse_event.get_relative();
+
+        if let Some(pivot) = &mut self.bucky_camera_base {
+            let mut pivot_rot = pivot.get_rotation();
+            pivot_rot.y -= delta.x * 0.005;
+            pivot.set_rotation(pivot_rot);
+        }
+
+        if let Some(cam) = &mut self.camera_base {
+            let mut cam_rot = cam.get_rotation();
+            cam_rot.x -= delta.y * 0.005;
+            cam_rot.x = cam_rot
+                .x
+                .clamp(deg_to_rad(-30.0) as f32, deg_to_rad(30.0) as f32);
+            cam.set_rotation(cam_rot);
+        }
     }
 }
 

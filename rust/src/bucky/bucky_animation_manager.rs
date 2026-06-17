@@ -4,6 +4,7 @@ use crate::bucky::Bucky;
 
 pub trait BuckyAnimationPlayer {
     fn play_animation(&mut self, anim_name: &str);
+    fn play_particle(&mut self, particle_name: &str);
 }
 
 impl BuckyAnimationPlayer for Bucky {
@@ -35,5 +36,20 @@ impl BuckyAnimationPlayer for Bucky {
                 anim_player.play();
             }
         };
+    }
+
+    fn play_particle(&mut self, particle_name: &str) {
+        match particle_name {
+            "jump" => {
+                if let Some(j_part) = &mut self.bucky_jump_particle {
+                    j_part.restart();
+                }
+            }
+
+            _ => {
+                godot_error!("no particle with this name");
+                return;
+            }
+        }
     }
 }

@@ -8,17 +8,6 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_e68yd"]
 radius = 1.2206064
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8cs40"]
-shader = ExtResource("6_5aklo")
-shader_parameter/aberration_strength = 0.96400004579
-shader_parameter/blur_strength = 0.570000027075
-shader_parameter/noise_strength = 0.0350000016625
-shader_parameter/vignette_strength = 0.430000020425
-shader_parameter/scanline_strength = 0.016
-shader_parameter/distortion_strength = 0.1
-shader_parameter/ghost_strength = 0.12
-shader_parameter/flicker_strength = 0.005
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5aklo"]
 albedo_texture = ExtResource("2_eigxu")
 metallic_specular = 0.0
@@ -152,6 +141,40 @@ _surfaces = [{
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ca5at"]
 data = PackedVector3Array(-0.375, -0.75, 0, -0.125, -0.75, -0.25, -0.125, -0.5, -0.25, -0.375, -0.75, 0, -0.125, -0.5, -0.25, -0.375, -0.5, 0, -0.125, -0.75, 0.25, -0.125, -0.75, -0.25, -0.375, -0.75, 0, -0.375, -0.5, 0, -0.125, -0.5, -0.25, -0.125, -0.5, 0.25, -0.125, -0.5, 0.25, -0.125, -0.5, -0.25, -0.125, -0.75, -0.25, -0.125, -0.5, 0.25, -0.125, -0.75, -0.25, -0.125, -0.75, 0.25, -0.125, -0.75, 0.25, -0.375, -0.75, 0, -0.375, -0.5, 0, -0.125, -0.75, 0.25, -0.375, -0.5, 0, -0.125, -0.5, 0.25, 0.375, 0.75, -0.25, -0.125, 0.75, -0.25, -0.125, -0.75, -0.25, 0.375, 0.75, -0.25, -0.125, -0.75, -0.25, 0.375, -0.75, -0.25, -0.125, -0.75, 0.25, -0.125, -0.75, -0.25, -0.125, 0.75, -0.25, -0.125, -0.75, 0.25, -0.125, 0.75, -0.25, -0.125, 0.75, 0.25, -0.125, -0.75, 0.25, 0.375, -0.75, 0.25, 0.375, -0.75, -0.25, -0.125, -0.75, 0.25, 0.375, -0.75, -0.25, -0.125, -0.75, -0.25, -0.125, 0.75, 0.25, -0.125, 0.75, -0.25, 0.375, 0.75, -0.25, -0.125, 0.75, 0.25, 0.375, 0.75, -0.25, 0.375, 0.75, 0.25, 0.375, 0.75, 0.25, 0.375, 0.75, -0.25, 0.375, -0.75, -0.25, 0.375, 0.75, 0.25, 0.375, -0.75, -0.25, 0.375, -0.75, 0.25, 0.375, -0.75, 0.25, -0.125, -0.75, 0.25, -0.125, 0.75, 0.25, 0.375, -0.75, 0.25, -0.125, 0.75, 0.25, 0.375, 0.75, 0.25)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1aukf"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_eigxu"]
+offsets = PackedFloat32Array(0.37796375, 0.9386332)
+colors = PackedColorArray(1, 1, 1, 1, 0.95686275, 0.8039216, 0.9019608, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_reo2j"]
+gradient = SubResource("Gradient_eigxu")
+
+[sub_resource type="Curve" id="Curve_s3bnp"]
+_data = [Vector2(0, 0.98428434), 0.0, 0.0, 0, 0, Vector2(0.1332436, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qc41x"]
+curve = SubResource("Curve_s3bnp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e68yd"]
+direction = Vector3(0, -1, 0)
+spread = 90.471
+flatness = 0.476
+initial_velocity_min = 3.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_qc41x")
+color_ramp = SubResource("GradientTexture1D_reo2j")
+
+[sub_resource type="SphereMesh" id="SphereMesh_jxv8m"]
+radius = 0.2
+height = 0.4
+
 [sub_resource type="Animation" id="Animation_eigxu"]
 length = 0.001
 tracks/0/type = "value"
@@ -241,7 +264,7 @@ tracks/6/keys = {
 
 [sub_resource type="Animation" id="Animation_3pi5h"]
 resource_name = "drop"
-length = 0.19999999999999998
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -321,7 +344,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_5aklo"]
 resource_name = "jump"
-length = 0.19999999999999998
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -456,29 +479,26 @@ _data = {
 &"walk": SubResource("Animation_s3bnp")
 }
 
-[node name="bucky" type="Bucky" unique_id=769577246 node_paths=PackedStringArray("camera_base", "char_body_base", "bucky_anim_player")]
-camera_base = NodePath("Camera3D")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8cs40"]
+shader = ExtResource("6_5aklo")
+shader_parameter/aberration_strength = 0.96400004579
+shader_parameter/blur_strength = 0.570000027075
+shader_parameter/noise_strength = 0.0350000016625
+shader_parameter/vignette_strength = 0.430000020425
+shader_parameter/scanline_strength = 0.016
+shader_parameter/distortion_strength = 0.1
+shader_parameter/ghost_strength = 0.12
+shader_parameter/flicker_strength = 0.005
+
+[node name="bucky" type="Bucky" unique_id=769577246 node_paths=PackedStringArray("camera_base", "char_body_base", "bucky_anim_player", "bucky_jump_particle", "bucky_camera_base")]
+camera_base = NodePath("cambase/Camera3D")
 char_body_base = NodePath("charbase")
 bucky_anim_player = NodePath("buckyanim")
+bucky_jump_particle = NodePath("charbase/base2/particles/jump_part")
+bucky_camera_base = NodePath("cambase")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=479421915]
 shape = SubResource("SphereShape3D_e68yd")
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1233319799]
-transform = Transform3D(-4.2328097e-08, -0.24958101, 0.968354, -1.0909533e-08, 0.968354, 0.24958101, -1, -8.881784e-16, -4.3711395e-08, 9.473955, 5.088418, 0)
-current = true
-
-[node name="Control" type="Control" parent="Camera3D" unique_id=2054083447]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 192.0
-offset_bottom = 192.0
-
-[node name="ColorRect" type="ColorRect" parent="Camera3D/Control" unique_id=911347275]
-material = SubResource("ShaderMaterial_8cs40")
-layout_mode = 0
-offset_right = 320.0
-offset_bottom = 240.0
 
 [node name="charbase" type="Node3D" parent="." unique_id=1898209574]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0.043547153, 0.75501823, 0)
@@ -563,6 +583,38 @@ mesh = SubResource("ArrayMesh_4ptg7")
 [node name="entity_4_collision_shape" type="CollisionShape3D" parent="charbase/base2/leg_pivot2/entity_4_func_detail" unique_id=1425233172]
 shape = SubResource("ConcavePolygonShape3D_ca5at")
 
+[node name="particles" type="Node3D" parent="charbase/base2" unique_id=226417885]
+
+[node name="jump_part" type="GPUParticles3D" parent="charbase/base2/particles" unique_id=1814495095]
+transform = Transform3D(1, 0, -4.2632564e-14, 0, 1, 0, 4.2632564e-14, 0, 1, 0.25152823, -0.5326226, 0.00482342)
+material_override = SubResource("StandardMaterial3D_1aukf")
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_e68yd")
+draw_pass_1 = SubResource("SphereMesh_jxv8m")
+
 [node name="buckyanim" type="AnimationPlayer" parent="." unique_id=390990448]
 root_node = NodePath("../charbase")
 libraries/ = SubResource("AnimationLibrary_5aklo")
+
+[node name="cambase" type="Node3D" parent="." unique_id=1585690624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6051743, 0)
+
+[node name="Camera3D" type="Camera3D" parent="cambase" unique_id=1233319799]
+transform = Transform3D(-4.2328097e-08, -0.24958101, 0.968354, -1.0909533e-08, 0.968354, 0.24958101, -1, -8.881784e-16, -4.3711395e-08, 9.473955, 3.4832437, 0)
+current = true
+
+[node name="Control" type="Control" parent="cambase/Camera3D" unique_id=2054083447]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 192.0
+offset_bottom = 192.0
+
+[node name="ColorRect" type="ColorRect" parent="cambase/Camera3D/Control" unique_id=911347275]
+material = SubResource("ShaderMaterial_8cs40")
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 240.0
