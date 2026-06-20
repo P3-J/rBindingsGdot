@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://deewjcptfphsk"
+path="res://.godot/imported/castle.1.map-98f653bf26e14161a0125dca1b9bd4f9.tres"
+
+[deps]
+
+source_file="res://src/worlds/castle/autosave/castle.1.map"
+dest_files=["res://.godot/imported/castle.1.map-98f653bf26e14161a0125dca1b9bd4f9.tres"]
+
+[params]
+

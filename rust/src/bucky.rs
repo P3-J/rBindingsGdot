@@ -1,7 +1,7 @@
 use godot::classes::input::MouseMode;
 use godot::classes::{
     AnimationPlayer, Camera3D, CharacterBody3D, GpuParticles3D, ICharacterBody3D, Input,
-    InputEvent, InputEventMouseMotion, PhysicsRayQueryParameters3D,
+    InputEvent, InputEventMouseButton, InputEventMouseMotion, PhysicsRayQueryParameters3D,
 };
 use godot::global::deg_to_rad;
 use godot::prelude::*;
@@ -70,15 +70,23 @@ impl ICharacterBody3D for Bucky {
     fn process(&mut self, delta: f64) {
         self.handle_input();
         self.handle_movement(delta as f32);
+
+        if self.base().get_global_position().y < -4.0 {
+            self.base_mut().set_global_position(Vector3 {
+                x: 103.,
+                y: 2.,
+                z: 32.,
+            });
+        }
     }
 
     fn input(&mut self, event: Gd<InputEvent>) {
         self.handle_camera_input(&event);
-    }
-
-    fn ready(&mut self) {
-        let mut is = Input::singleton();
-        is.set_mouse_mode(MouseMode::CAPTURED);
+        if let Ok(mb) = event.try_cast::<InputEventMouseButton>() {
+            if mb.is_pressed() {
+                Input::singleton().set_mouse_mode(MouseMode::CAPTURED);
+            }
+        }
     }
 }
 
@@ -132,7 +140,7 @@ impl Bucky {
         if result.is_empty() {
             return None;
         }
-
+        // test commit 2
         let normal: Vector3 = result.get("normal")?.to();
         Some(normal)
     }
@@ -180,19 +188,21 @@ impl Bucky {
         }
 
         if input.is_action_just_pressed("jump") {
-            self.handle_jump_externals();
             if self.is_wall_sliding {
                 velocity.x = self.wall_normal.x * WALL_HOP_NORMAL_FORCE;
                 velocity.z = self.wall_normal.z * WALL_HOP_NORMAL_FORCE;
                 velocity.y = WALL_HOP_VELOCITY;
                 self.is_wall_sliding = false;
                 self.has_wall_jumped = true;
+                self.handle_jump_externals();
             } else if on_floor {
                 velocity.y = JUMP_VELOCITY;
                 self.jumps_remaining -= 1;
+                self.handle_jump_externals();
             } else if self.jumps_remaining > 0 {
                 velocity.y = DOUBLE_JUMP_VELOCITY;
                 self.jumps_remaining -= 1;
+                self.handle_jump_externals();
             }
         }
 
